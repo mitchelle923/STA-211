@@ -3,6 +3,9 @@ title: "Homework 9"
 author: "Mitchelle Mojekwu"
 date: "2022-11-14"
 output: pdf_document
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -17,19 +20,19 @@ library(broom)
 library(readr)
 ```
 
+#Task 1 Write code in R that uses Newton-Raphson to find the square root
+of a number c, i.e., use the function $f(x) = x^2-c$. With $c= 650$ and
+a starting point of $x_1=10$, how many steps does it take (i.e. what is
+the value of t) for the error in the approximation to first become less
+than 0.001?
 
-#Task 1
-Write code in R that uses Newton-Raphson to find the square root of a number c,
-i.e., use the function $f(x) = x^2-c$. With $c= 650$ and a starting point of 
-$x_1=10$, how many steps does it take (i.e. what is the value of t) for the error
-in the approximation to first become less than 0.001?
 ```{r}
 
 x_t <- 10 #starting point
 x_tt <- 100000 #this is x_t+1
 t <- 0 #tracks iterations
 
-while(abs(x_tt - x_t) >= 0.001){ #iterate until |x_t+1 - x_t| is less tahn 0.001
+while(abs(x_tt - x_t) >= 0.001){ #iterate until |x_t+1 - x_t| is less thann 0.001
   if (t>0){
     x_t <- x_tt
   }
@@ -43,15 +46,19 @@ x_t
 x_tt
 ```
 
-As seen above, it takes 5 steps for the error in the approximation to first 
-become less than 0.001. i.e. $t=5$.
+As seen above, it takes 5 steps for the error in the approximation to
+first become less than 0.001. i.e. $t=5$.
 
 #Task 2
 
-Perform logistic regression to study the probability of failure as a function of
-temperature.
-```{r data}
+Perform logistic regression to study the probability of failure as a
+function of temperature.
+
+```{r ,include=FALSE}
 library(alr4)
+```
+
+```{r data}
 #glimpse(alr4::Challeng)
 oring <- alr4::Challeng
 
@@ -64,12 +71,10 @@ glimpse(oring)
 ```
 
 ```{r}
-oring_model <- glm(fail_fact ~ temp, data = oring)
+#Logistic Regression
+oring_model <- glm(fail_fact==1 ~ temp, data = oring, family = "binomial")
 
 tidy(oring_model) %>% 
   kable(digits = 3)
 
 ```
-
-
-
