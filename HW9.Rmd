@@ -1,0 +1,75 @@
+---
+title: "Homework 9"
+author: "Mitchelle Mojekwu"
+date: "2022-11-14"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(knitr)
+library(readr)
+library(tidyverse)
+library(broom)
+library(readr)
+```
+
+
+#Task 1
+Write code in R that uses Newton-Raphson to find the square root of a number c,
+i.e., use the function $f(x) = x^2-c$. With $c= 650$ and a starting point of 
+$x_1=10$, how many steps does it take (i.e. what is the value of t) for the error
+in the approximation to first become less than 0.001?
+```{r}
+
+x_t <- 10 #starting point
+x_tt <- 100000 #this is x_t+1
+t <- 0 #tracks iterations
+
+while(abs(x_tt - x_t) >= 0.001){ #iterate until |x_t+1 - x_t| is less tahn 0.001
+  if (t>0){
+    x_t <- x_tt
+  }
+  fx <- x_t ^ 2 - 650 #scalar function
+  d_fx <- 2*x_t
+  x_tt <- x_t -(fx/d_fx) #x_t+1 = x_t - [f(x_t)/f'(x_t)]
+  t <- t+1
+}
+t 
+x_t
+x_tt
+```
+
+As seen above, it takes 5 steps for the error in the approximation to first 
+become less than 0.001. i.e. $t=5$.
+
+#Task 2
+
+Perform logistic regression to study the probability of failure as a function of
+temperature.
+```{r data}
+library(alr4)
+#glimpse(alr4::Challeng)
+oring <- alr4::Challeng
+
+#fail: # of o-rings that have failed (failure is when 1 or 2 o-rings fail)
+#temp: air temperature at launch (degrees F)
+
+#add factor column where 0=no fail o-rings failed, 1= >0 o-rings failed
+oring$fail_fact <-ifelse(oring$fail >0,1,0)
+glimpse(oring)
+```
+
+```{r}
+oring_model <- glm(fail_fact ~ temp, data = oring)
+
+tidy(oring_model) %>% 
+  kable(digits = 3)
+
+```
+
+
+
